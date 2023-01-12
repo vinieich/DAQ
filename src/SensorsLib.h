@@ -1,5 +1,5 @@
-#ifndef WeatherStation_h
-#define WeatherStation_h
+#ifndef SensorsLib_h
+#define SensorsLib_h
 
 #include <Arduino.h>
 #include <configuration.h>
@@ -8,10 +8,10 @@
 // #include <OneWire.h>
 // #include <DallasTemperature.h>
 
-class WeatherStation
+class SensorsLib
 {
     public:
-        WeatherStation();
+        SensorsLib();
           
             /**
               * @brief setup the rain gauge ISR

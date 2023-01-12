@@ -44,13 +44,13 @@
 // }
 
 
-// void WeatherStation::setupRainGaugeISR()
+// void SensorsLib::setupRainGaugeISR()
 // {
 //      pinMode(raingaugePin,INPUT);
 //      attachInterrupt(digitalPinToInterrupt(raingaugePin),newTip,FALLING);      
 // }
 
-WeatherStation::WeatherStation()
+SensorsLib::SensorsLib()
 {
 
         // pinMode(windvanePin,INPUT);
@@ -84,13 +84,13 @@ WeatherStation::WeatherStation()
     
 }
 
-long WeatherStation::mapa(long x, long in_min, long in_max, long out_min, long out_max) 
+long SensorsLib::mapa(long x, long in_min, long in_max, long out_min, long out_max) 
 {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
 
-// float WeatherStation::wind_direction()
+// float SensorsLib::wind_direction()
 // {    int i = 0;
 
 //     float temp;                          // Store the diference between sample and table
@@ -157,7 +157,7 @@ long WeatherStation::mapa(long x, long in_min, long in_max, long out_min, long o
 // }
 
 
-// float WeatherStation::wind_speed()
+// float SensorsLib::wind_speed()
 // {
 //     bool state, lastState;
 //     long bouncetime = 0;
@@ -193,7 +193,7 @@ long WeatherStation::mapa(long x, long in_min, long in_max, long out_min, long o
 
 
 
-// float WeatherStation::soil_humidity()
+// float SensorsLib::soil_humidity()
 // {   
 
 //     int sample = analogRead(soilhumidityPin);
@@ -208,7 +208,7 @@ long WeatherStation::mapa(long x, long in_min, long in_max, long out_min, long o
 // }
 
 
-// float WeatherStation::leaf_wetness()
+// float SensorsLib::leaf_wetness()
 // {
 //     int sample = analogRead(leafwetnessAPin);
 //     #if DEBUG
@@ -221,7 +221,7 @@ long WeatherStation::mapa(long x, long in_min, long in_max, long out_min, long o
 //     return (wet);
 // }
 
-// float WeatherStation::soil_temperature()
+// float SensorsLib::soil_temperature()
 // {
 //     if (!flag_soiltemperature)
 //     {   
@@ -238,7 +238,7 @@ long WeatherStation::mapa(long x, long in_min, long in_max, long out_min, long o
 //     return temp;
 // }
 
-float WeatherStation::air_temperature()
+float SensorsLib::air_temperature()
 {
     if (!flag_dht)
     {
@@ -255,7 +255,7 @@ float WeatherStation::air_temperature()
     return temperature;
 }
 
-float WeatherStation::air_humidity()
+float SensorsLib::air_humidity()
 {
     if (!flag_dht)
     {
@@ -271,7 +271,7 @@ float WeatherStation::air_humidity()
     return humidity;
 }
 
-// float WeatherStation::raingauge()
+// float SensorsLib::raingauge()
 // {
 //     #if DEBUG
 //         Serial.print("\necho_debug: ");
@@ -283,12 +283,12 @@ float WeatherStation::air_humidity()
 //     return rainAmount;
 // }
 
-// void WeatherStation::rst_raingauge()
+// void SensorsLib::rst_raingauge()
 // {
 //     rainTip = 0;
 // }
 
-// int WeatherStation::uv_level()
+// int SensorsLib::uv_level()
 // {
 //     int UV = 1 ;
 //     int sample = analogRead(uvlevelPin);
@@ -328,7 +328,7 @@ float WeatherStation::air_humidity()
 //     return UV;
 // }
 
-// float WeatherStation::BMPtemperature()
+// float SensorsLib::BMPtemperature()
 // {
 //     if (!flag_pressure)
 //     {
@@ -350,7 +350,7 @@ float WeatherStation::air_humidity()
 //     return temp_inside;    
 // }
 
-// float WeatherStation::altitude()
+// float SensorsLib::altitude()
 // {
 //     if (!flag_pressure)
 //     {
@@ -371,7 +371,7 @@ float WeatherStation::air_humidity()
 //     return alt;
 // }
 
-// float WeatherStation::pressure()
+// float SensorsLib::pressure()
 // {
 
 //     if (!flag_pressure)
@@ -394,7 +394,7 @@ float WeatherStation::air_humidity()
 //     return press;
 // }
    
-// float WeatherStation::light_meter()
+// float SensorsLib::light_meter()
 // {
 //     float lux ;
 //     if (!flag_lux)
@@ -422,7 +422,7 @@ float WeatherStation::air_humidity()
 // }
 
 
-    int WeatherStation::rtc_time()
+    int SensorsLib::rtc_time()
     {
     if (!flag_rtc)
     {
