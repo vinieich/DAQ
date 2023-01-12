@@ -10,7 +10,7 @@
 
 
 #include "SensorsLib.h"
-#include "configuration.h"
+//#include "configuration.h"
 #include "pinSetup.h"
 // #include "pinSetup.h"
 #include <Wire.h>
@@ -20,8 +20,8 @@
 // OneWire barramento(soiltemperaturePin);
 // DallasTemperature sensor(&barramento);
 
-#include <DHTesp.h>
 DHTesp dht;
+RTC_DS3231 rtc;
 
 // #include <Adafruit_BMP085.h>
 // Adafruit_BMP085 bmp180;
@@ -30,8 +30,8 @@ DHTesp dht;
 
 // BH1750 lightMeter(0x23);
 
-#include "RTClib.h"
-RTC_DS3231 rtc;
+
+
 
 //SemaphoreHandle_t adcSemaphore1;
 
@@ -406,7 +406,7 @@ int SensorsLib::gasLevel()
 //     return lux;
 // }
 
-int SensorsLib::rtc_time()
+DateTime SensorsLib::rtc_time()
 {
     if (!rtcStarted)
     {
@@ -422,19 +422,8 @@ int SensorsLib::rtc_time()
 
         rtcStarted = true;
     }
-    DateTime now = rtc.now();
+    return rtc.now();
 
-    year = 0;
-    year = ((now.year()) & 0xFF00);
-    year += ((now.year()) & 0x00FF);
-    month = (now.month() & 0xFF);
-    day = (now.day() & 0xFF);
-    hour = now.hour() & 0xFF;
-    minute = now.minute() & 0xFF;
-    seconds = now.second() & 0xFF;
-    dayOfWeek = now.dayOfTheWeek() & 0xFF;
-
-    return 0;
 }
 
 /*

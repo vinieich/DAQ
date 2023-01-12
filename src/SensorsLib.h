@@ -2,8 +2,11 @@
 #define SensorsLib_h
 
 #include <Arduino.h>
-#include <configuration.h>
+#include <DHTesp.h>
+#include <RTClib.h>
 // #include "pinSetup.h"
+
+#include "configuration.h"
 
 // #include <OneWire.h>
 // #include <DallasTemperature.h>
@@ -102,7 +105,7 @@ public:
   /** @brief read the now date by I2C communication
    * @retval now date (year, month, day, hour, minute, second)
    */
-  int rtc_time();
+  DateTime rtc_time();
 
   int year;
   int month;

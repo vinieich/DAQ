@@ -18,8 +18,8 @@
   /// GPIO a ser utilizado pelo respectivo módulo no microcontrolador
 /// @name PINS
 ///@{
-#define DHT_PIN 32
 #define DHT_TYPE DHT11
+#define DHT_PIN 32
 #define HW484_PIN 2
 #define RTC_CLOCK_PIN 25
 #define RTC_DATA_PIN 33
