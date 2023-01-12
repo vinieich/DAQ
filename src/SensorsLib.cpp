@@ -1,38 +1,42 @@
-#include "WeatherStation.h"
-#include <configuration.h>
+/**
+ * @file SensorsLib.cpp
+ * @author your name (you@domain.com)
+ * @brief 
+ * @version 0.1
+ * @date 2023-01-12
+ * @copyright Copyright (c) 2023
+ * 
+ */
+
+
+#include "SensorsLib.h"
+#include "configuration.h"
 #include "pinSetup.h"
+// #include "pinSetup.h"
 #include <Wire.h>
 // #include <OneWire.h>
 // #include <DallasTemperature.h>
 
+// OneWire barramento(soiltemperaturePin);
+// DallasTemperature sensor(&barramento);
 
-    // OneWire barramento(soiltemperaturePin);
-    // DallasTemperature sensor(&barramento);
+#include <DHTesp.h>
+DHTesp dht;
 
-      
+// #include <Adafruit_BMP085.h>
+// Adafruit_BMP085 bmp180;
 
+// #include <BH1750.h>
 
-    #include <DHTesp.h>
-    DHT dht(dhtPin, DHTTYPE); 
+// BH1750 lightMeter(0x23);
 
-    // #include <Adafruit_BMP085.h>
-    // Adafruit_BMP085 bmp180;
+#include "RTClib.h"
+RTC_DS3231 rtc;
 
+//SemaphoreHandle_t adcSemaphore1;
 
-
-    // #include <BH1750.h>
-    
-    // BH1750 lightMeter(0x23);
-
-
-
-    #include "RTClib.h"
-    RTC_DS3231 rtc;
-        
-            int rainTip = 0;
-            long last_time = 0;
-
-
+int rainTip = 0;
+long last_time = 0;
 
 // void IRAM_ATTR newTip()
 // {
@@ -43,52 +47,41 @@
 //   }
 // }
 
-
 // void SensorsLib::setupRainGaugeISR()
 // {
 //      pinMode(raingaugePin,INPUT);
-//      attachInterrupt(digitalPinToInterrupt(raingaugePin),newTip,FALLING);      
+//      attachInterrupt(digitalPinToInterrupt(raingaugePin),newTip,FALLING);
 // }
 
 SensorsLib::SensorsLib()
 {
 
-        // pinMode(windvanePin,INPUT);
-        // int i;
-        // for ( i = 0; i<windvane_size; i ++)     Vwindvane[i] = Vin *( (Rwindvane_table[i] + Rwindvane_2) / (Rwindvane_table[i]+ Rwindvane_1 + Rwindvane_2));
-        // for ( i = 0; i<windvane_size; i ++)     Vwindvane_min[i] = 0.9 * Vwindvane[i];
-        // for ( i = 0; i<windvane_size; i ++)     Vwindvane_max[i] = 1.1 * Vwindvane[i];
-        // #if forcewindvanevoltage
-        //     float Vwindvanetemp[16] = {2.32, 1.22, 1.39, 0.22, 0.26, 0.14, 0.52, 0.33, 0.85, 0.71, 1.88, 1.80, 2.83, 2.44, 2.62, 2.09};
-        //     for ( i = 0; i<windvane_size; i ++)     Vwindvane[i] = Vwindvanetemp[i];
-        // #endif
-  
+    // pinMode(windvanePin,INPUT);
+    // int i;
+    // for ( i = 0; i<windvane_size; i ++)     Vwindvane[i] = Vin *( (Rwindvane_table[i] + Rwindvane_2) / (Rwindvane_table[i]+ Rwindvane_1 + Rwindvane_2));
+    // for ( i = 0; i<windvane_size; i ++)     Vwindvane_min[i] = 0.9 * Vwindvane[i];
+    // for ( i = 0; i<windvane_size; i ++)     Vwindvane_max[i] = 1.1 * Vwindvane[i];
+    // #if forcewindvanevoltage
+    //     float Vwindvanetemp[16] = {2.32, 1.22, 1.39, 0.22, 0.26, 0.14, 0.52, 0.33, 0.85, 0.71, 1.88, 1.80, 2.83, 2.44, 2.62, 2.09};
+    //     for ( i = 0; i<windvane_size; i ++)     Vwindvane[i] = Vwindvanetemp[i];
+    // #endif
 
-        // pinMode(anemometerPin,INPUT);   
-    
+    // pinMode(anemometerPin,INPUT);
 
-    
-        // pinMode(soilhumidityPin,INPUT);
-    
+    // pinMode(soilhumidityPin,INPUT);
 
-        // pinMode(leafwetnessAPin,INPUT);
-      
+    // pinMode(leafwetnessAPin,INPUT);
 
-        // pinMode(uvlevelPin,INPUT);
+    // pinMode(uvlevelPin,INPUT);
 
-    
-        // Wire.begin();
-       // lightMeter.begin();
-       
-         
-    
+    // Wire.begin();
+    // lightMeter.begin();
 }
 
-long SensorsLib::mapa(long x, long in_min, long in_max, long out_min, long out_max) 
+long SensorsLib::mapa(long x, long in_min, long in_max, long out_min, long out_max)
 {
-  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
-
 
 // float SensorsLib::wind_direction()
 // {    int i = 0;
@@ -96,17 +89,16 @@ long SensorsLib::mapa(long x, long in_min, long in_max, long out_min, long out_m
 //     float temp;                          // Store the diference between sample and table
 //     int flag_i = 0;                     // Flag to store the closest value
 //     int adc = analogRead(windvanePin);   // Reads the analog input
-   
+
 //     //adc = 978;                         // Uncomment to force a value
 //     float Vsample;
 //     Vsample=float(Vin)*adc/adcresolution; // Convert digital to analog  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
- 
 //     temp =  abs(Vsample - Vwindvane[0]); // First comparation value
 //     flag_i = -1;
-//  /*   for (i = 0; i<windvane_size; i =i +2)   
+//  /*   for (i = 0; i<windvane_size; i =i +2)
 //         if ((Vsample >= Vwindvane_min[i]) && (Vsample <= Vwindvane_max[i]))
-//             {   
+//             {
 //                 Serial.print("\nmin: ");
 //                 Serial.print(Vwindvane_min[i]);
 //                 Serial.print(" sample: ");
@@ -116,13 +108,13 @@ long SensorsLib::mapa(long x, long in_min, long in_max, long out_min, long out_m
 //                 flag_i = i;
 //             }
 // */
-//     for ( i = 0; i<windvane_size; i = i + 2)  
+//     for ( i = 0; i<windvane_size; i = i + 2)
 //       if (abs(Vsample - Vwindvane[i]) < temp)
 //        {
 //           temp =  abs(Vsample - Vwindvane[i]);
 //           flag_i = i;
-//        }       
-    
+//        }
+
 //     #if DEBUG
 //        // Serial.print("\necho_debug: Windvane sample: ");
 //        // Serial.print(adc);
@@ -130,19 +122,18 @@ long SensorsLib::mapa(long x, long in_min, long in_max, long out_min, long out_m
 //       //  Serial.print(Vsample);
 //         //Serial.print(". Index: ");
 //         //Serial.print(flag_i);
-        
+
 //     #endif
 
 //     return WindDegrees[flag_i];
 // }
-
 
 // bool DIGread()
 // {
 //     int i;
 //     int pos = 0;
 //     int neg = 0;
-    
+
 //     for(i = 0; i< samplingAVG; i++)
 //     {
 //         if (digitalRead(anemometerPin))
@@ -155,7 +146,6 @@ long SensorsLib::mapa(long x, long in_min, long in_max, long out_min, long out_m
 //     else
 //         return 0;
 // }
-
 
 // float SensorsLib::wind_speed()
 // {
@@ -176,7 +166,7 @@ long SensorsLib::mapa(long x, long in_min, long in_max, long out_min, long out_m
 //             }
 //             lastState = state;
 //         }
-//      }    
+//      }
 
 //     float windspeed = Rotations * anemometer_factor / anemometer_timesample;
 //     #if DEBUG
@@ -187,14 +177,11 @@ long SensorsLib::mapa(long x, long in_min, long in_max, long out_min, long out_m
 //         Serial.print("seconds.");
 //     #endif
 
-
 //     return windspeed;
 // }
 
-
-
 // float SensorsLib::soil_humidity()
-// {   
+// {
 
 //     int sample = analogRead(soilhumidityPin);
 //     #if DEBUG
@@ -207,7 +194,6 @@ long SensorsLib::mapa(long x, long in_min, long in_max, long out_min, long out_m
 //     return soilhumiditpercent;
 // }
 
-
 // float SensorsLib::leaf_wetness()
 // {
 //     int sample = analogRead(leafwetnessAPin);
@@ -217,20 +203,20 @@ long SensorsLib::mapa(long x, long in_min, long in_max, long out_min, long out_m
 //     #endif
 //     sample = constrain(sample,wetleaffactor,dryleaffactor);
 //     float wet = mapa(sample,wetleaffactor,dryleaffactor,100,0);
-   
+
 //     return (wet);
 // }
 
 // float SensorsLib::soil_temperature()
 // {
-//     if (!flag_soiltemperature)
-//     {   
+//     if (!soilTemperatureStarted)
+//     {
 //         #if DEBUG
 //             Serial.print("\necho_debug: Starting soil temperature sensor");
-//         #endif 
+//         #endif
 
 //         sensor.begin();
-//         flag_soiltemperature = true;
+//         soilTemperatureStarted = true;
 //     }
 //     sensor.requestTemperatures();
 //     float temp = (sensor.getTempCByIndex(0));
@@ -238,37 +224,37 @@ long SensorsLib::mapa(long x, long in_min, long in_max, long out_min, long out_m
 //     return temp;
 // }
 
-float SensorsLib::air_temperature()
+TempAndHumidity SensorsLib::airTemperatureHumidity()
 {
-    if (!flag_dht)
+    if (!dhtStarted)
     {
-        #if DEBUG
-            Serial.print("\necho_debug: Starting DHT sensor..");
-            
-        #endif
-        dht.begin(DHT11_PIN, DHTesp::DHT11); 
-        flag_dht = true;
-    }
-    float temperature = dht.readTemperature(); 
-    delay(dht_timesample); 
+#if DEBUG
+        Serial.print(F("\necho_debug: Starting DHT sensor.."));
 
-    return temperature;
+#endif
+        dht.setup(DHT_PIN, DHTesp::DHT_TYPE);
+        dhtStarted = true;
+    }
+    return dht.getTempAndHumidity();
 }
 
-float SensorsLib::air_humidity()
+int SensorsLib::gasLevel()
 {
-    if (!flag_dht)
+    if (!gasStarted)
     {
-        #if DEBUG
-            Serial.print("\necho_debug: Starting DHT sensor..");
-        #endif
-        dht.begin(); 
-        flag_dht = true;
-    }
-    float humidity =  dht.readHumidity();
-    delay(dht_timesample); 
+#if DEBUG
+        Serial.print(F("\necho_debug: Starting Gas sensor.."));
 
-    return humidity;
+#endif
+        // Espaço deixado em branco para futuras checagens/inicializações
+
+        gasStarted = true;
+    }
+
+    // Preciso alterar caso tenha outro sensor que use analogRead
+    int mq2Value = analogRead(MQ2_PIN);
+    delay(1); // Delay utilizado para não haver interferência caso precise ler mais de um sensor no mesmo canal ADC
+    return mq2Value; 
 }
 
 // float SensorsLib::raingauge()
@@ -330,7 +316,7 @@ float SensorsLib::air_humidity()
 
 // float SensorsLib::BMPtemperature()
 // {
-//     if (!flag_pressure)
+//     if (!pressureStarted)
 //     {
 //         #if DEBUG
 //             Serial.print("\necho_debug: Starting pressure sensor... ");
@@ -342,17 +328,17 @@ float SensorsLib::air_humidity()
 //             bmp180.begin(0x77);
 //         #endif
 
-//         flag_pressure = true;
+//         pressureStarted = true;
 
 //     }
 
 //     float temp_inside = bmp180.readTemperature();
-//     return temp_inside;    
+//     return temp_inside;
 // }
 
 // float SensorsLib::altitude()
 // {
-//     if (!flag_pressure)
+//     if (!pressureStarted)
 //     {
 //         #if DEBUG
 //             Serial.print("\necho_debug: Starting pressure sensor... ");
@@ -364,7 +350,7 @@ float SensorsLib::air_humidity()
 //             bmp180.begin(0x77);
 //         #endif
 
-//         flag_pressure = true;
+//         pressureStarted = true;
 
 //     }
 //     float alt = bmp180.readAltitude();
@@ -374,85 +360,82 @@ float SensorsLib::air_humidity()
 // float SensorsLib::pressure()
 // {
 
-//     if (!flag_pressure)
+//     if (!pressureStarted)
 //     {
 //         #if DEBUG
 //             Serial.print("\necho_debug: Starting pressure sensor... ");
 //             if (bmp180.begin(0x77))
 //                 Serial.print("OK");
 //             else
-//                 Serial.print("ERROR");  
+//                 Serial.print("ERROR");
 //         #else
 //             bmp180.begin(0x77);
 //         #endif
 
-//         flag_pressure = true;
+//         pressureStarted = true;
 
-//     }    
+//     }
 //     float press = bmp180.readPressure();
 
 //     return press;
 // }
-   
+
 // float SensorsLib::light_meter()
 // {
 //     float lux ;
-//     if (!flag_lux)
+//     if (!luxStarted)
 //     {
 //         #if DEBUG
 //             Serial.print("\necho_debug: Starting lux sensor... ");
 //             if (lightMeter.begin())
 //             {
-//               flag_lux = true ;  
+//               luxStarted = true ;
 //               Serial.print("OK");
-//             } 
+//             }
 //             else
-//                 Serial.print("ERROR"); 
+//                 Serial.print("ERROR");
 //         #else
 //             if( lightMeter.begin())
-//                flag_lux = true ;   
+//                luxStarted = true ;
 //         #endif
 
-      
 //     }
-    
+
 //     lux = lightMeter.readLightLevel();
 
 //     return lux;
 // }
 
-
-    int SensorsLib::rtc_time()
+int SensorsLib::rtc_time()
+{
+    if (!rtcStarted)
     {
-    if (!flag_rtc)
-    {
-        #if DEBUG
-            Serial.print("\necho_debug: Starting RTC... ");
-            if (rtc.begin())
-                Serial.print("OK");
-            else
-                Serial.print("ERROR"); 
-        #else
-            rtc.begin();
-        #endif
+#if DEBUG
+        Serial.print("\necho_debug: Starting RTC... ");
+        if (rtc.begin())
+            Serial.print("OK");
+        else
+            Serial.print("ERROR");
+#else
+        rtc.begin();
+#endif
 
-        flag_rtc = true ;
+        rtcStarted = true;
     }
     DateTime now = rtc.now();
 
+    year = 0;
+    year = ((now.year()) & 0xFF00);
+    year += ((now.year()) & 0x00FF);
+    month = (now.month() & 0xFF);
+    day = (now.day() & 0xFF);
+    hour = now.hour() & 0xFF;
+    minute = now.minute() & 0xFF;
+    seconds = now.second() & 0xFF;
+    dayOfWeek = now.dayOfTheWeek() & 0xFF;
 
-     year =0;
-      year = ((now.year() ) & 0xFF00);
-      year += ((now.year()) & 0x00FF);
-       month = (now.month() & 0xFF);
-      day = (now.day() & 0xFF);
-       hour = now.hour() & 0xFF;
-       minute = now.minute() & 0xFF;
-      seconds = now.second() & 0xFF; 
-      dayOfWeek = now.dayOfTheWeek() & 0xFF;
-    
     return 0;
-    }
+}
 
 /*
 int classeteste::f1(int f1a)
