@@ -3,10 +3,10 @@
 
 #include <Arduino.h>
 #include <configuration.h>
-#include "pinSetup.h"
+// #include "pinSetup.h"
 
-#include <OneWire.h>
-#include <DallasTemperature.h>
+// #include <OneWire.h>
+// #include <DallasTemperature.h>
 
 class WeatherStation
 {

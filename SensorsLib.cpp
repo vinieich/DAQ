@@ -2,27 +2,27 @@
 #include <configuration.h>
 #include "pinSetup.h"
 #include <Wire.h>
-#include <OneWire.h>
-#include <DallasTemperature.h>
+// #include <OneWire.h>
+// #include <DallasTemperature.h>
 
 
-    OneWire barramento(soiltemperaturePin);
-    DallasTemperature sensor(&barramento);
+    // OneWire barramento(soiltemperaturePin);
+    // DallasTemperature sensor(&barramento);
 
       
 
 
-    #include <DHT.h>
+    #include <DHTesp.h>
     DHT dht(dhtPin, DHTTYPE); 
 
-    #include <Adafruit_BMP085.h>
-    Adafruit_BMP085 bmp180;
+    // #include <Adafruit_BMP085.h>
+    // Adafruit_BMP085 bmp180;
 
 
 
-    #include <BH1750.h>
+    // #include <BH1750.h>
     
-    BH1750 lightMeter(0x23);
+    // BH1750 lightMeter(0x23);
 
 
 
@@ -34,21 +34,21 @@
 
 
 
-void IRAM_ATTR newTip()
-{
-  if((long)(micros()-last_time) >= raingaugeDebounce *1000)
-  {
-    rainTip += 1;
-    last_time = micros();
-  }
-}
+// void IRAM_ATTR newTip()
+// {
+//   if((long)(micros()-last_time) >= raingaugeDebounce *1000)
+//   {
+//     rainTip += 1;
+//     last_time = micros();
+//   }
+// }
 
 
-void WeatherStation::setupRainGaugeISR()
-{
-     pinMode(raingaugePin,INPUT);
-     attachInterrupt(digitalPinToInterrupt(raingaugePin),newTip,FALLING);      
-}
+// void WeatherStation::setupRainGaugeISR()
+// {
+//      pinMode(raingaugePin,INPUT);
+//      attachInterrupt(digitalPinToInterrupt(raingaugePin),newTip,FALLING);      
+// }
 
 WeatherStation::WeatherStation()
 {
@@ -78,7 +78,7 @@ WeatherStation::WeatherStation()
 
     
         Wire.begin();
-       // lightMeter.begin();
+       lightMeter.begin();
        
          
     
@@ -246,7 +246,7 @@ float WeatherStation::air_temperature()
             Serial.print("\necho_debug: Starting DHT sensor..");
             
         #endif
-        dht.begin(); 
+        dht.begin(DHT11_PIN, DHTesp::DHT11); 
         flag_dht = true;
     }
     float temperature = dht.readTemperature(); 
