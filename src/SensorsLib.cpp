@@ -1,16 +1,15 @@
 /**
  * @file SensorsLib.cpp
  * @author your name (you@domain.com)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-01-12
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 
-
 #include "SensorsLib.h"
-//#include "configuration.h"
+// #include "configuration.h"
 #include "pinSetup.h"
 // #include "pinSetup.h"
 #include <Wire.h>
@@ -23,6 +22,8 @@
 DHTesp dht;
 RTC_DS3231 rtc;
 
+
+
 // #include <Adafruit_BMP085.h>
 // Adafruit_BMP085 bmp180;
 
@@ -30,10 +31,7 @@ RTC_DS3231 rtc;
 
 // BH1750 lightMeter(0x23);
 
-
-
-
-//SemaphoreHandle_t adcSemaphore1;
+// SemaphoreHandle_t adcSemaphore1;
 
 int rainTip = 0;
 long last_time = 0;
@@ -229,7 +227,7 @@ TempAndHumidity SensorsLib::airTemperatureHumidity()
     if (!dhtStarted)
     {
 #if DEBUG
-        Serial.print(F("\necho_debug: Starting DHT sensor.."));
+        Serial.print("\necho_debug: Starting DHT sensor..");
 
 #endif
         dht.setup(DHT_PIN, DHTesp::DHT_TYPE);
@@ -243,7 +241,7 @@ int SensorsLib::gasLevel()
     if (!gasStarted)
     {
 #if DEBUG
-        Serial.print(F("\necho_debug: Starting Gas sensor.."));
+        Serial.print("\necho_debug: Starting Gas sensor..");
 
 #endif
         // Espaço deixado em branco para futuras checagens/inicializações
@@ -254,7 +252,7 @@ int SensorsLib::gasLevel()
     // Preciso alterar caso tenha outro sensor que use analogRead
     int mq2Value = analogRead(MQ2_PIN);
     delay(1); // Delay utilizado para não haver interferência caso precise ler mais de um sensor no mesmo canal ADC
-    return mq2Value; 
+    return mq2Value;
 }
 
 // float SensorsLib::raingauge()
@@ -410,6 +408,8 @@ DateTime SensorsLib::rtc_time()
 {
     if (!rtcStarted)
     {
+          Wire.begin(RTC_DATA_PIN, RTC_CLOCK_PIN, 100000U);
+
 #if DEBUG
         Serial.print("\necho_debug: Starting RTC... ");
         if (rtc.begin())
@@ -422,9 +422,11 @@ DateTime SensorsLib::rtc_time()
 
         rtcStarted = true;
     }
-    return rtc.now();
-
+    
+    
+return rtc.now();
 }
+
 
 /*
 int classeteste::f1(int f1a)

@@ -1,12 +1,12 @@
-#ifndef SensorsLib_h
-#define SensorsLib_h
+#ifndef SENSORSLIB_h
+#define SENSORSLIB_h
 
 #include <Arduino.h>
 #include <DHTesp.h>
 #include <RTClib.h>
 // #include "pinSetup.h"
 
-#include "configuration.h"
+#include <configuration.h>
 
 // #include <OneWire.h>
 // #include <DallasTemperature.h>
@@ -125,4 +125,4 @@ private:
   int p2;
 };
 
-#endif
+#endif //SENSORSLIB_h
